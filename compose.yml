@@ -1,0 +1,79 @@
+services:
+  # MySQL database
+  db:
+    image: mysql:8.0.36
+    hostname: mysql
+    container_name: mdl-db
+    volumes:
+      - ./volumes/mysql/data:/var/lib/mysql
+      - ./db/structure.sql:/docker-entrypoint-initdb.d/structure.sql  # Mount SQL structure file
+    env_file:
+      - .env
+    ports:
+      - "3366:3306"
+    restart: always
+    entrypoint: >
+      sh -c "
+      echo 'CREATE DATABASE IF NOT EXISTS ${MYSQL_DATABASE};' > /docker-entrypoint-initdb.d/init.sql;
+      echo 'GRANT ALL ON *.* TO \"${MYSQL_USER}\"@\"%\";' >> /docker-entrypoint-initdb.d/init.sql;
+      
+      # Import the database structure
+      echo 'Importing database structure...';
+      mysql -u root -p${MYSQL_ROOT_PASSWORD} ${MYSQL_DATABASE} < /docker-entrypoint-initdb.d/structure.sql;
+  
+      exec docker-entrypoint.sh mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+      "
+
+
+  # NPM backend API
+  api:
+    build:
+      context: .
+      dockerfile: api/dev.Dockerfile
+    hostname: api
+    container_name: mdl-api
+    volumes:
+      - ../api.modula.by:/src
+    profiles:
+      - dev
+      - prod
+    restart: always
+    networks:
+      - modulanet
+
+  # NPM frontend
+  front:
+    build:
+      context: .
+      # TODO: use different files, i.e. `front/${TARGET}.Dockerfile`
+      dockerfile: front/dev.Dockerfile
+    hostname: front
+    container_name: mdl-front
+    volumes:
+      - ./../modula.by:/src
+    profiles:
+      - dev
+      - prod
+    restart: always
+    networks:
+      - modulanet
+
+  # Nginx reverse proxy
+  nginx:
+    image: nginx:1.27-alpine
+    container_name: mdl-nginx
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    ports:
+      - "82:80"
+      #- "443:443"
+    restart: always
+#    depends_on:
+#      - api
+#      - front
+    networks:
+      - modulanet
+
+networks:
+  modulanet:
+    driver: bridge
