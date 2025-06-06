@@ -39,7 +39,7 @@ services:
       - prod
     restart: always
     networks:
-      - modulanet
+      - modula-net
 
   # NPM frontend
   front:
@@ -56,7 +56,7 @@ services:
       - prod
     restart: always
     networks:
-      - modulanet
+      - modula-net
 
   # Nginx reverse proxy
   nginx:
@@ -72,8 +72,8 @@ services:
 #      - api
 #      - front
     networks:
-      - modulanet
+      - modula-net
 
 networks:
-  modulanet:
+  modula-net:
     driver: bridge

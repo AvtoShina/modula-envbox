@@ -1,7 +1,7 @@
 # 🚀 Modula EnvBox Project
 
 ## **Overview**
-Modula EnvBox is a Dockerized web application that leverages **ExpressJS (backend), Vite (frontend), MySQL (database)**, and **Nginx (reverse proxy)** for efficient development and deployment.
+Modula EnvBox is a Dockerized web application that leverages **Express.js (backend), Vite (frontend), MySQL (database)**, and **Nginx (reverse proxy)** for efficient development and deployment.
 
 ---
 

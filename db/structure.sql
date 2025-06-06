@@ -1,4 +1,3 @@
-
 --
 -- Database: `modula_api`
 --
@@ -19,7 +18,7 @@ CREATE TABLE `appeal` (
                           `type` tinyint(4) NOT NULL DEFAULT 1,
                           `status` int(11) NOT NULL DEFAULT 1,
                           `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-                          `upadted_at` datetime NOT NULL DEFAULT current_timestamp()
+                          `updated_at` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
