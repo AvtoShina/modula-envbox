@@ -1,9 +1,17 @@
 FROM node:24-alpine3.21 AS builder
 
-RUN npm install && npm run build
+WORKDIR /src
 
-FROM nginx:1.25
+COPY package.json package-lock.json* ./
+RUN npm ci
+
+COPY . .
+RUN npm run build
+
+FROM nginx:1.27-alpine
+
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 COPY --from=builder /src/dist /usr/share/nginx/html
-EXPOSE 80 443
 
+EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
