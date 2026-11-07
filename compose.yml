@@ -25,9 +25,18 @@ services:
     container_name: mdl-api
     volumes:
       - ${API_DIR}:/src
-      - /src/node_modules          # keep image deps; hide host's
+      - /src/node_modules
+      - ${API_DIR}/storage/uploads:/src/storage/uploads
     env_file:
-      - .env
+      - ${API_DIR}/.env                      # app's own config (CORS, AmoCRM, …)
+    environment:
+      - NODE_ENV=production
+      - PORT=${API_INTERNAL_PORT}
+      - DB_HOST=db                           # override whatever's in app .env
+      - DB_PORT=3306
+      - DB_USER=${MYSQL_USER}
+      - DB_PASS=${MYSQL_PASSWORD}
+      - DB_NAME=${MYSQL_DATABASE}
     ports:
       - "${API_PORT}:${API_INTERNAL_PORT}"
     restart: always
