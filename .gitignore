@@ -1,3 +1,5 @@
 .idea
 .vcode
+.DS_Store
+.env
 volumes/mysql

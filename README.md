@@ -5,6 +5,20 @@ Modula EnvBox is a Dockerized web application that leverages **Express.js (backe
 
 ---
 
+Internet
+  │
+  ▼ :443 (TLS)
+host nginx (apt-installed, on the VM)
+  │  terminates TLS, sets X-Forwarded-* headers
+  │
+  ├─► modula.by      ─► 127.0.0.1:3086 ─► mdl-front:80    (static files, SPA fallback)
+  │                                       └► /api/* → mdl-api:3000
+  │
+  └─► api.modula.by  ─► 127.0.0.1:3087 ─► mdl-api:3000
+
+
+---
+
 ## **🛠 Project Setup**
 
 ### **🔹 Prerequisites**
